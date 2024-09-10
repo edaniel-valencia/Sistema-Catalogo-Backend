@@ -17,7 +17,8 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const user_1 = require("../models/user");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const CreateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { Uname, Ulastname, Upassword, Uemail, Ucredential } = req.body;
+    var _a;
+    const { Uname, Ulastname, Upassword, Uemail, Ucredential, RoleId } = req.body;
     const userEmail = yield user_1.User.findOne({ where: { Uemail: Uemail } });
     const userCredential = yield user_1.User.findOne({ where: { Ucredential: Ucredential } });
     if (userEmail) {
@@ -38,6 +39,8 @@ const CreateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             Uemail: Uemail,
             Upassword: UpasswordHash,
             Ucredential: Ucredential,
+            RoleId: RoleId,
+            Uimagen: (_a = req.file) === null || _a === void 0 ? void 0 : _a.filename, // Imagen guardada con multer
             Ustatus: 1
         });
         res.json({
@@ -135,7 +138,7 @@ const CreateUserDashboard = (req, res) => __awaiter(void 0, void 0, void 0, func
 exports.CreateUserDashboard = CreateUserDashboard;
 const UpdateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { Uid } = req.params;
-    const { Uname, Pdescription, Pstatus, CategoryId } = req.body;
+    const { Uname, Ulastname, Upassword, Uemail, Ucredential, Ustatus } = req.body;
     try {
         const user = yield user_1.User.findOne({ where: { Uid: Uid } });
         if (!user) {
@@ -147,9 +150,11 @@ const UpdateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         console.log("Estoy por aqui ****** =>" + Uname);
         yield user_1.User.update({
             Uname: Uname,
-            Pdescription: Pdescription,
-            Pstatus: 1,
-            CategoryId: CategoryId
+            Ulastname: Ulastname,
+            Ucredential: Ucredential,
+            Uemail: Uemail,
+            Upassword: Upassword,
+            Ustatus: Ustatus,
         }, { where: { Uid: Uid } });
         console.log("Estoy por aqui ******");
         return res.json({

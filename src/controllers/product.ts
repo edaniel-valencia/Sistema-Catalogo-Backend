@@ -1,5 +1,7 @@
 import { Request, Response } from 'express'
 import { Product } from '../models/product';
+import multer from 'multer'
+import sharp from 'sharp'
 
 export const ReadProduct = async (req: Request, res: Response) => {
     const listProduct = await Product.findAll();
@@ -44,6 +46,18 @@ export const CreateProduct = async (req: Request, res: Response) => {
             })
         }
 
+        const storage = multer.diskStorage({
+            destination:(req, file, callback) => {
+                callback(null, './uploads')
+            },
+            filename: (req, file, callback) => {
+                const ext = file.originalname.split('.').pop()
+                callback(null, `${Date.now()}.${ext}`)
+            },
+        })
+
+        const upload = multer({storage})
+        
         Product.create({
             Pname: Pname,
             Pdescription: Pdescription,

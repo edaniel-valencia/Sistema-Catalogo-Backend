@@ -8,9 +8,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DeleteProduct = exports.UpdateProduct = exports.CreateProduct = exports.ReadProductId = exports.ReadProduct = void 0;
 const product_1 = require("../models/product");
+const multer_1 = __importDefault(require("multer"));
 const ReadProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const listProduct = yield product_1.Product.findAll();
     res.json(listProduct);
@@ -46,6 +50,16 @@ const CreateProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                 msg: `Producto ${Pname}, ya existe`
             });
         }
+        const storage = multer_1.default.diskStorage({
+            destination: (req, file, callback) => {
+                callback(null, './uploads');
+            },
+            filename: (req, file, callback) => {
+                const ext = file.originalname.split('.').pop();
+                callback(null, `${Date.now()}.${ext}`);
+            },
+        });
+        const upload = (0, multer_1.default)({ storage });
         product_1.Product.create({
             Pname: Pname,
             Pdescription: Pdescription,

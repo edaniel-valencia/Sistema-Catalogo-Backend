@@ -53,8 +53,9 @@ class Server {
             try {
                 yield category_2.Category.sync();
                 yield product_2.Product.sync();
-                yield role_2.Role.sync();
                 yield user_2.User.sync();
+                yield role_2.Role.sync();
+                // await UserHasRoles.sync(); 
                 // await Product.sync({force: true}); 
                 // await Category.sync({alter: true}); 
                 // await Category.destroy({where: {}});

@@ -4,9 +4,11 @@ import { User } from '../models/user'
 import { Op } from 'sequelize'
 import jwt from 'jsonwebtoken'
 
+
+
 export const CreateUser = async (req: Request, res: Response) => {
 
-    const { Uname, Ulastname, Upassword, Uemail, Ucredential } = req.body  
+    const { Uname, Ulastname, Upassword, Uemail, Ucredential, RoleId } = req.body  
     const userEmail = await User.findOne({ where: {  Uemail: Uemail  }})
     const userCredential = await User.findOne({ where: {  Ucredential: Ucredential  }})
 
@@ -22,7 +24,9 @@ export const CreateUser = async (req: Request, res: Response) => {
         })
     }
 
-    const UpasswordHash = await bcrypt.hash(Upassword, 10)
+    const UpasswordHash = await bcrypt.hash(Upassword, 10);
+  
+
     try {
         User.create({
             Uname: Uname,
@@ -30,6 +34,8 @@ export const CreateUser = async (req: Request, res: Response) => {
             Uemail: Uemail,
             Upassword: UpasswordHash,
             Ucredential: Ucredential,
+            RoleId: RoleId,
+            Uimagen: req.file?.filename, // Imagen guardada con multer
             Ustatus: 1
         })
 
@@ -148,7 +154,7 @@ export const CreateUserDashboard = async (req: Request, res: Response) => {
 export const UpdateUser = async (req: Request, res: Response) => {
 
     const { Uid } = req.params;
-    const { Uname, Pdescription, Pstatus, CategoryId } = req.body;
+    const { Uname, Ulastname, Upassword, Uemail, Ucredential, Ustatus } = req.body;
     
     try {
         const user: any = await User.findOne({ where: { Uid: Uid } });
@@ -164,9 +170,11 @@ export const UpdateUser = async (req: Request, res: Response) => {
         await User.update(
             {
                 Uname: Uname,
-                Pdescription: Pdescription,
-                Pstatus: 1,
-                CategoryId:CategoryId
+                Ulastname: Ulastname,
+                Ucredential: Ucredential,
+                Uemail: Uemail,
+                Upassword: Upassword,
+                Ustatus: Ustatus,
             },
             { where: { Uid: Uid } }
         );

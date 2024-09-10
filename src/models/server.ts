@@ -8,6 +8,8 @@ import { Product } from './product'
 import { Role } from './role'
 import { User } from './user'
 import cors from 'cors'
+import multer from 'multer'
+import sharp from 'sharp'
 
 class Server {
 
@@ -51,20 +53,19 @@ class Server {
 
             await Category.sync(); 
             await Product.sync(); 
-            await Role.sync(); 
             await User.sync(); 
+            await Role.sync(); 
+            // await UserHasRoles.sync(); 
             // await Product.sync({force: true}); 
             // await Category.sync({alter: true}); 
             // await Category.destroy({where: {}});
             // await Category.destroy({where:{}}); 
             // await Category.sync({ force: true });
-
             // await Product.destroy({where:{}}); 
             console.log("Conexion de DB exitoso");
         
         } catch (error) {
-            console.log("Conexion de DB errorena => "+error);
-            
+            console.log("Conexion de DB errorena => "+error);        
         }
     }
 }
