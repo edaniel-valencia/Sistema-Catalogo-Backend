@@ -3,13 +3,15 @@ import routesCategoty from '../routes/category'
 import routesProduct from '../routes/product'
 import routesRole from '../routes/role'
 import routesUser from '../routes/user'
+import routesAuth from '../routes/auth'
 import { Category } from './category'
 import { Product } from './product'
 import { Role } from './role'
 import { User } from './user'
 import cors from 'cors'
-import multer from 'multer'
-import sharp from 'sharp'
+// import multer from 'multer'
+// import sharp from 'sharp'  
+import { Client } from './client'
 
 class Server {
 
@@ -38,6 +40,7 @@ class Server {
         this.app.use(routesProduct);
         this.app.use(routesRole);
         this.app.use(routesUser);
+        this.app.use(routesAuth);
     }
 
     midlewares(){
@@ -54,6 +57,7 @@ class Server {
             await Category.sync(); 
             await Product.sync(); 
             await User.sync(); 
+            await Client.sync(); 
             await Role.sync(); 
             // await UserHasRoles.sync(); 
             // await Product.sync({force: true}); 

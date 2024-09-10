@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken'
 
 
 
-export const CreateUser = async (req: Request, res: Response) => {
+export const CreateClient = async (req: Request, res: Response) => {
 
     const { Uname, Ulastname, Upassword, Uemail, Ucredential, RoleId } = req.body  
     const userEmail = await User.findOne({ where: {  Uemail: Uemail  }})
@@ -50,7 +50,7 @@ export const CreateUser = async (req: Request, res: Response) => {
     }
 }
 
-// export const LoginUser = async (req: Request, res: Response) => {
+// export const LoginClient = async (req: Request, res: Response) => {
 //     const { Uemail, Upassword } = req.body;
 
 //     console.log(req.body);
@@ -79,27 +79,27 @@ export const CreateUser = async (req: Request, res: Response) => {
 //     res.json({ token })
 // }
 
-export const ReadUser = async (req: Request, res: Response) => {
-    const listUser = await User.findAll();
+export const ReadClient = async (req: Request, res: Response) => {
+    const listClient = await User.findAll();
     res.json(
-        listUser
+        listClient
     );
 }
 
-export const ReadUserId = async (req: Request, res: Response) => {
+export const ReadClientId = async (req: Request, res: Response) => {
 
     const { Uid } = req.params;
     try {
-        const user = await User.findOne({ where: { Uid: Uid } });
+        const client = await User.findOne({ where: { Uid: Uid } });
 
-        if (!user) {
+        if (!client) {
             return res.status(404).json({
                 msg: `User con ID ${Uid} no encontrada`
             });
         }
         return res.json({
             msg: `User con ID ${Uid} encontrada exitosamente`,
-            data: user
+            data: client
         });
 
     } catch (error) {
@@ -109,7 +109,7 @@ export const ReadUserId = async (req: Request, res: Response) => {
     }
 }
 
-export const CreateUserDashboard = async (req: Request, res: Response) => {
+export const CreateClientDashboard = async (req: Request, res: Response) => {
 
     const { Uname, Ulastname, Upassword, Uemail, Ucredential } = req.body  
     const userEmail = await User.findOne({ where: {  Uemail: Uemail  }})
@@ -151,7 +151,7 @@ export const CreateUserDashboard = async (req: Request, res: Response) => {
 
 }
 
-export const UpdateUser = async (req: Request, res: Response) => {
+export const UpdateClient = async (req: Request, res: Response) => {
 
     const { Uid } = req.params;
     const { Uname, Ulastname, Upassword, Uemail, Ucredential, Ustatus } = req.body;
@@ -193,7 +193,7 @@ export const UpdateUser = async (req: Request, res: Response) => {
     }
 };
 
-export const DeleteUser = async (req: Request, res: Response) => {
+export const DeleteClient = async (req: Request, res: Response) => {
 
     const { Uid } = req.params;
     try {

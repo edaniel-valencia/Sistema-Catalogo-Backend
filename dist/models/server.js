@@ -17,11 +17,15 @@ const category_1 = __importDefault(require("../routes/category"));
 const product_1 = __importDefault(require("../routes/product"));
 const role_1 = __importDefault(require("../routes/role"));
 const user_1 = __importDefault(require("../routes/user"));
+const auth_1 = __importDefault(require("../routes/auth"));
 const category_2 = require("./category");
 const product_2 = require("./product");
 const role_2 = require("./role");
 const user_2 = require("./user");
 const cors_1 = __importDefault(require("cors"));
+// import multer from 'multer'
+// import sharp from 'sharp'  
+const client_1 = require("./client");
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
@@ -41,6 +45,7 @@ class Server {
         this.app.use(product_1.default);
         this.app.use(role_1.default);
         this.app.use(user_1.default);
+        this.app.use(auth_1.default);
     }
     midlewares() {
         //Parseo BOdy
@@ -54,6 +59,7 @@ class Server {
                 yield category_2.Category.sync();
                 yield product_2.Product.sync();
                 yield user_2.User.sync();
+                yield client_1.Client.sync();
                 yield role_2.Role.sync();
                 // await UserHasRoles.sync(); 
                 // await Product.sync({force: true}); 

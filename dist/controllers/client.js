@@ -12,10 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DeleteUser = exports.UpdateUser = exports.CreateUserDashboard = exports.ReadUserId = exports.ReadUser = exports.CreateUser = void 0;
+exports.DeleteClient = exports.UpdateClient = exports.CreateClientDashboard = exports.ReadClientId = exports.ReadClient = exports.CreateClient = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const user_1 = require("../models/user");
-const CreateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const CreateClient = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const { Uname, Ulastname, Upassword, Uemail, Ucredential, RoleId } = req.body;
     const userEmail = yield user_1.User.findOne({ where: { Uemail: Uemail } });
@@ -52,8 +52,8 @@ const CreateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
     }
 });
-exports.CreateUser = CreateUser;
-// export const LoginUser = async (req: Request, res: Response) => {
+exports.CreateClient = CreateClient;
+// export const LoginClient = async (req: Request, res: Response) => {
 //     const { Uemail, Upassword } = req.body;
 //     console.log(req.body);
 //     const user: any = await User.findOne({ where: { Uemail: Uemail } })
@@ -75,23 +75,23 @@ exports.CreateUser = CreateUser;
 //     );
 //     res.json({ token })
 // }
-const ReadUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const listUser = yield user_1.User.findAll();
-    res.json(listUser);
+const ReadClient = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const listClient = yield user_1.User.findAll();
+    res.json(listClient);
 });
-exports.ReadUser = ReadUser;
-const ReadUserId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.ReadClient = ReadClient;
+const ReadClientId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { Uid } = req.params;
     try {
-        const user = yield user_1.User.findOne({ where: { Uid: Uid } });
-        if (!user) {
+        const client = yield user_1.User.findOne({ where: { Uid: Uid } });
+        if (!client) {
             return res.status(404).json({
                 msg: `User con ID ${Uid} no encontrada`
             });
         }
         return res.json({
             msg: `User con ID ${Uid} encontrada exitosamente`,
-            data: user
+            data: client
         });
     }
     catch (error) {
@@ -100,8 +100,8 @@ const ReadUserId = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
     }
 });
-exports.ReadUserId = ReadUserId;
-const CreateUserDashboard = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.ReadClientId = ReadClientId;
+const CreateClientDashboard = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { Uname, Ulastname, Upassword, Uemail, Ucredential } = req.body;
     const userEmail = yield user_1.User.findOne({ where: { Uemail: Uemail } });
     const userCredential = yield user_1.User.findOne({ where: { Ucredential: Ucredential } });
@@ -135,8 +135,8 @@ const CreateUserDashboard = (req, res) => __awaiter(void 0, void 0, void 0, func
         });
     }
 });
-exports.CreateUserDashboard = CreateUserDashboard;
-const UpdateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.CreateClientDashboard = CreateClientDashboard;
+const UpdateClient = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { Uid } = req.params;
     const { Uname, Ulastname, Upassword, Uemail, Ucredential, Ustatus } = req.body;
     try {
@@ -167,8 +167,8 @@ const UpdateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
     }
 });
-exports.UpdateUser = UpdateUser;
-const DeleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.UpdateClient = UpdateClient;
+const DeleteClient = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { Uid } = req.params;
     try {
         const user = yield user_1.User.findOne({ where: { Uid: Uid } });
@@ -188,4 +188,4 @@ const DeleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
     }
 });
-exports.DeleteUser = DeleteUser;
+exports.DeleteClient = DeleteClient;

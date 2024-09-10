@@ -12,9 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DeleteUser = exports.UpdateUser = exports.CreateUserDashboard = exports.ReadUserId = exports.ReadUser = exports.CreateUser = void 0;
+exports.DeleteUser = exports.UpdateUser = exports.CreateUserDashboard = exports.ReadUserId = exports.ReadUser = exports.LoginUser = exports.CreateUser = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const user_1 = require("../models/user");
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const CreateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const { Uname, Ulastname, Upassword, Uemail, Ucredential, RoleId } = req.body;
@@ -53,28 +54,27 @@ const CreateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.CreateUser = CreateUser;
-// export const LoginUser = async (req: Request, res: Response) => {
-//     const { Uemail, Upassword } = req.body;
-//     console.log(req.body);
-//     const user: any = await User.findOne({ where: { Uemail: Uemail } })
-//     if (!user) {
-//         return res.status(400).json({
-//             msg: `Usuario no existe con el email ${Uemail}`
-//         })
-//     }
-//     const passwordValid = await bcrypt.compare(Upassword, user.Upassword)
-//     if (!passwordValid) {
-//         return res.status(400).json({
-//             msg: `Password Incorrecto => ${Upassword}`
-//         })
-//     }
-//     const token = jwt.sign({
-//         Uemail: Uemail
-//     }, process.env.SECRET_KEY || 'TSE-Edaniel-Valencia',
-//         // { expiresIn: '10000' }
-//     );
-//     res.json({ token })
-// }
+const LoginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { Uemail, Upassword } = req.body;
+    console.log(req.body);
+    const user = yield user_1.User.findOne({ where: { Uemail: Uemail } });
+    if (!user) {
+        return res.status(400).json({
+            msg: `Usuario no existe con el email ${Uemail}`
+        });
+    }
+    const passwordValid = yield bcrypt_1.default.compare(Upassword, user.Upassword);
+    if (!passwordValid) {
+        return res.status(400).json({
+            msg: `Password Incorrecto => ${Upassword}`
+        });
+    }
+    const token = jsonwebtoken_1.default.sign({
+        Uemail: Uemail
+    }, process.env.SECRET_KEY || 'TSE-Edaniel-Valencia');
+    res.json({ token });
+});
+exports.LoginUser = LoginUser;
 const ReadUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const listUser = yield user_1.User.findAll();
     res.json(listUser);
