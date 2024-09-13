@@ -8,7 +8,7 @@ const transporter = nodemailer.createTransport({
     secure: true, // Conexión SSL
     auth: {
         user: 'evalencia@teampichincha.com', // Correo del remitente
-        pass: '3dxuy3lvxl398@TP', // Contraseña del remitente
+        pass: '', // Contraseña del remitente
     },
 });
 
