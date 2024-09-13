@@ -10,6 +10,7 @@ exports.Category = connection_1.default.define("category", {
     Cid: { type: sequelize_1.DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     Cname: { type: sequelize_1.DataTypes.STRING, allowNull: false },
     Cdescription: { type: sequelize_1.DataTypes.STRING, allowNull: false },
+    Cimage: { type: sequelize_1.DataTypes.STRING, allowNull: true }, // Nuevo campo para la imagen
     Cstatus: { type: sequelize_1.DataTypes.INTEGER, allowNull: false },
     CcreatedAt: { type: sequelize_1.DataTypes.DATE, field: 'Ccreated', defaultValue: sequelize_1.DataTypes.NOW, allowNull: false },
     CupdatedAt: { type: sequelize_1.DataTypes.DATE, field: 'Cupdated', defaultValue: sequelize_1.DataTypes.NOW, allowNull: false },

@@ -1,9 +1,10 @@
-import express, {Application} from 'express'
+import express, {Application, json, urlencoded} from 'express'
 import routesCategoty from '../routes/category'
 import routesProduct from '../routes/product'
 import routesRole from '../routes/role'
 import routesUser from '../routes/user'
 import routesAuth from '../routes/auth'
+import routesEmail from '../routes/email'
 import { Category } from './category'
 import { Product } from './product'
 import { Role } from './role'
@@ -41,12 +42,15 @@ class Server {
         this.app.use(routesRole);
         this.app.use(routesUser);
         this.app.use(routesAuth);
+        this.app.use(routesEmail);
     }
 
     midlewares(){
         //Parseo BOdy
         this.app.use(express.json())
-        
+        this.app.use(urlencoded({extended: true}))
+        this.app.use(json())
+
         //
         this.app.use(cors())
     }

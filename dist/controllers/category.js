@@ -49,6 +49,12 @@ const CreateCategory = (req, res) => __awaiter(void 0, void 0, void 0, function*
             msg: `Categoria ${Cname}, ya existe`
         });
     }
+    const file = req.file;
+    if (!file) {
+        return res.status(400).json({
+            msg: "No se subió ninguna imagen"
+        });
+    }
     try {
         category_1.Category.create({
             Cname: Cname,

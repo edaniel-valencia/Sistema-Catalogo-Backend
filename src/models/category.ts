@@ -5,6 +5,8 @@ export const Category = sequelize.define("category", {
   Cid: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   Cname: { type: DataTypes.STRING, allowNull: false },
   Cdescription: { type: DataTypes.STRING, allowNull: false },
+  Cimage: { type: DataTypes.STRING, allowNull: true },  // Nuevo campo para la imagen
+
   Cstatus: { type: DataTypes.INTEGER, allowNull: false },
   CcreatedAt: { type: DataTypes.DATE, field: 'Ccreated', defaultValue: DataTypes.NOW, allowNull: false }, 
   CupdatedAt: { type: DataTypes.DATE, field: 'Cupdated', defaultValue: DataTypes.NOW, allowNull: false }, 

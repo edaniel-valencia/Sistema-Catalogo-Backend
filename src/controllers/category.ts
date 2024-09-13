@@ -43,6 +43,14 @@ export const CreateCategory = async (req: Request, res: Response) => {
             msg: `Categoria ${Cname}, ya existe`
         })
     }
+
+    const file = req.file;
+
+    if (!file) {
+        return res.status(400).json({
+            msg: "No se subió ninguna imagen"
+        });
+    }
     try {
         Category.create({
             Cname: Cname,
