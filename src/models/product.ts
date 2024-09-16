@@ -8,6 +8,7 @@ export const Product = sequelize.define("product", {
   Pdescription: { type: DataTypes.STRING, allowNull: false },
   Pprice:       { type: DataTypes.DECIMAL(10, 2), allowNull: false },
   CategoryId:   { type: DataTypes.INTEGER, references: {  model: Category, key: 'Cid' },  allowNull: false },
+  Pimage: { type: DataTypes.STRING, allowNull: true },  // Nuevo campo para la imagen
   Pstatus:      { type: DataTypes.INTEGER, allowNull: false },
   PcreatedAt:   { type: DataTypes.DATE, field: 'Pcreated', defaultValue: DataTypes.NOW, allowNull: false },
   PupdatedAt:   { type: DataTypes.DATE, field: 'Pupdated', defaultValue: DataTypes.NOW, allowNull: false },

@@ -46,10 +46,8 @@ const category_2 = require("./category");
 const product_2 = require("./product");
 const role_2 = require("./role");
 const user_2 = require("./user");
+const path_1 = __importDefault(require("path"));
 const cors_1 = __importDefault(require("cors"));
-// import multer from 'multer'
-// import sharp from 'sharp'  
-const client_1 = require("./client");
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
@@ -74,6 +72,8 @@ class Server {
     }
     midlewares() {
         //Parseo BOdy
+        this.app.use('/static', express_1.default.static(path_1.default.resolve('static')));
+        // this.app.use('/static', express.static(path.join(__dirname, 'static')));
         this.app.use(express_1.default.json());
         this.app.use((0, express_1.urlencoded)({ extended: true }));
         this.app.use((0, express_1.json)());
@@ -86,7 +86,6 @@ class Server {
                 yield category_2.Category.sync();
                 yield product_2.Product.sync();
                 yield user_2.User.sync();
-                yield client_1.Client.sync();
                 yield role_2.Role.sync();
                 // await UserHasRoles.sync(); 
                 // await Product.sync({force: true}); 

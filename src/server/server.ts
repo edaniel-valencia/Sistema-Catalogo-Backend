@@ -5,14 +5,18 @@ import routesRole from '../routes/role'
 import routesUser from '../routes/user'
 import routesAuth from '../routes/auth'
 import routesEmail from '../routes/email'
-import { Category } from './category'
-import { Product } from './product'
-import { Role } from './role'
-import { User } from './user'
+import routesBanner from '../routes/banner'
+import { Category } from '../models/category'
+import { Product } from '../models/product'
+import { Role } from '../models/role'
+import { User } from '../models/user'
+import { Banner } from '../models/banner'
+import path from 'path';
+
 import cors from 'cors'
 // import multer from 'multer'
 // import sharp from 'sharp'  
-import { Client } from './client'
+import { Client } from '../models/client'
 
 class Server {
 
@@ -43,10 +47,14 @@ class Server {
         this.app.use(routesUser);
         this.app.use(routesAuth);
         this.app.use(routesEmail);
+        this.app.use(routesBanner);
     }
 
     midlewares(){
         //Parseo BOdy
+        this.app.use('/static', express.static(path.resolve('static')));
+
+        // this.app.use('/static', express.static(path.join(__dirname, 'static')));
         this.app.use(express.json())
         this.app.use(urlencoded({extended: true}))
         this.app.use(json())
@@ -61,8 +69,8 @@ class Server {
             await Category.sync(); 
             await Product.sync(); 
             await User.sync(); 
-            await Client.sync(); 
             await Role.sync(); 
+            await Banner.sync(); 
             // await UserHasRoles.sync(); 
             // await Product.sync({force: true}); 
             // await Category.sync({alter: true}); 

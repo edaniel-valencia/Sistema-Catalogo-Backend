@@ -1,15 +1,14 @@
 import { Router } from "express";
 import { CreateUser, CreateUserDashboard, DeleteUser, ReadUser, ReadUserId, UpdateUser } from "../controllers/user";
-import { upload } from "../middlewares/multerConfig";
 
 const router = Router();
 
 router.get("/api/user/read", ReadUser)
 router.get("/api/user/read/:Uid", ReadUserId)
 
-router.post("/api/user/create", upload.single('Uimagen'),  CreateUserDashboard)
+router.post("/api/user/create", CreateUserDashboard)
 // router.post("/api/user/login", LoginUser)
-router.post("/api/user/register",  upload.single('Uimagen'), CreateUser)
+router.post("/api/user/register", CreateUser)
 
 router.patch("/api/user/update/:Uid", UpdateUser)
 

@@ -13,6 +13,7 @@ exports.Product = connection_1.default.define("product", {
     Pdescription: { type: sequelize_1.DataTypes.STRING, allowNull: false },
     Pprice: { type: sequelize_1.DataTypes.DECIMAL(10, 2), allowNull: false },
     CategoryId: { type: sequelize_1.DataTypes.INTEGER, references: { model: category_1.Category, key: 'Cid' }, allowNull: false },
+    Pimage: { type: sequelize_1.DataTypes.STRING, allowNull: true }, // Nuevo campo para la imagen
     Pstatus: { type: sequelize_1.DataTypes.INTEGER, allowNull: false },
     PcreatedAt: { type: sequelize_1.DataTypes.DATE, field: 'Pcreated', defaultValue: sequelize_1.DataTypes.NOW, allowNull: false },
     PupdatedAt: { type: sequelize_1.DataTypes.DATE, field: 'Pupdated', defaultValue: sequelize_1.DataTypes.NOW, allowNull: false },

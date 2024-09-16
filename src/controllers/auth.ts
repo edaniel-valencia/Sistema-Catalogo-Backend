@@ -5,7 +5,6 @@ import jwt from 'jsonwebtoken'
 
 
 
-
 export const Login = async (req: Request, res: Response) => {
     const { Uemail, Upassword } = req.body;
 

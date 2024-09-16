@@ -1,7 +1,8 @@
 import { Request, Response } from 'express'
 import { Product } from '../models/product';
-import multer from 'multer'
-import sharp from 'sharp'
+import path from 'path';
+import fs from 'fs';
+import { Category } from '../models/category';
 
 export const ReadProduct = async (req: Request, res: Response) => {
     const listProduct = await Product.findAll();
@@ -9,6 +10,32 @@ export const ReadProduct = async (req: Request, res: Response) => {
         listProduct
     );
 }
+
+export const ReadCaregoryProduct = async (req: Request, res: Response) => {
+    const { categoryId } = req.params;
+    try {
+        const listProduct = await Product.findAll({
+            where: { CategoryId: categoryId }, // Asegúrate de que sea 'CategoryId', no 'categoryId'
+            include: [
+                {
+                    model: Category,
+                    as: 'categories', // Alias correcto
+                    // attributes: ['Cname'], // Atributos que deseas incluir de la categoría (opcional)
+                }
+            ]
+        });
+
+        if (listProduct.length === 0) {
+            return res.status(404).json({ message: "No se encontraron productos para esta categoría." });
+        }
+
+        res.json(listProduct);
+    } catch (error) {
+        res.status(500).json({ message: "Error al obtener los productos.", error });
+    }
+};
+
+
 
 export const ReadProductId = async (req: Request, res: Response) => {
     const { Pid } = req.params;
@@ -34,41 +61,60 @@ export const ReadProductId = async (req: Request, res: Response) => {
 
 export const CreateProduct = async (req: Request, res: Response) => {
 
-    const { Pname, Pdescription, categoryId } = req.body
+    const { Pname, Pdescription, Pprice, CategoryId } = req.body
+    console.log({ Pname, Pdescription, Pprice, CategoryId });
+
+    const file = req.file;
+
+    console.log({Pname});
+    
+
+    if (!Pname || !Pdescription || !Pprice) {
+        return res.status(400).json({
+            msg: "Nombre y descripción son requeridos"
+        });
+    }
+
+    if (!file) {
+        return res.status(400).json({
+            msg: "No se subió ninguna imagen"
+        });
+    }
+   
+
+    const existingProduct = await Product.findOne({ where: { Pname: Pname } });
+
+    if (existingProduct) {
+        return res.status(400).json({
+            msg: `Producto ${Pname}, ya existe`
+        })
+    }
+
+    const uploadPath = path.join('./static/product');
+
+    if (!fs.existsSync(uploadPath)) {
+        fs.mkdirSync(uploadPath, { recursive: true });
+    }
+
+    const fileName = `Image-${Date.now()}.${file.mimetype.split('/')[1]}`;
+    const filePath = path.join(uploadPath, fileName);
+
+    fs.writeFileSync(filePath, file.buffer);
 
     try {
-
-        const existingProduct = await Product.findOne({ where: { Pname: Pname } });
-
-        if (existingProduct) {
-            return res.status(400).json({
-                msg: `Producto ${Pname}, ya existe`
-            })
-        }
-
-        const storage = multer.diskStorage({
-            destination:(req, file, callback) => {
-                callback(null, './uploads')
-            },
-            filename: (req, file, callback) => {
-                const ext = file.originalname.split('.').pop()
-                callback(null, `${Date.now()}.${ext}`)
-            },
-        })
-
-        const upload = multer({storage})
-        
         Product.create({
             Pname: Pname,
             Pdescription: Pdescription,
-            CategoryId: categoryId,
+            Pprice: Pprice,
+            CategoryId: CategoryId,
+            Pimage: fileName, // Save the image file name to the database
             Pstatus: 1
         })
-        
+
         return res.json({
             msg: `Producto ${Pname}, creada exitosamente`
         })
- 
+
     } catch (error) {
 
         return res.json({
@@ -82,31 +128,84 @@ export const CreateProduct = async (req: Request, res: Response) => {
 export const UpdateProduct = async (req: Request, res: Response) => {
 
     const { Pid } = req.params;
-    const { Pname, Pdescription, Pstatus, CategoryId } = req.body;
-    
-    try {
-        const product: any = await Product.findOne({ where: { Pid: Pid } });
-        
+    const { Pname, Pdescription, Pstatus, Pprice, CategoryId } = req.body;
+    const file = req.file;
+
+    const product: any = await Product.findOne({ where: { Pid: Pid } });
+
         if (!product) {
             return res.status(404).json({
                 msg: `Producto ${Pname} no encontrada`
             });
         }
-        console.log("Estoy por aqui ****** =>" + product.Pid);
-        console.log("Estoy por aqui ****** =>" + Pname);
+       
+        
+
+
+        if (!file) {
+            try {
+        
+
+                await Product.update(
+                    {
+                        Pname: Pname,
+                        Pdescription: Pdescription,
+                        Pprice: Pprice,
+                        CategoryId: CategoryId,
+                        Pstatus: Pstatus
+                    },
+                    { where: { Pid: Pid } }
+                );
+        
+        
+                return res.json({
+                    msg: `Producto ${Pname} actualizada exitosamente`
+                });
+        
+            } catch (error) {
+                return res.status(500).json({
+                    msg: `Error al actualizar la Producto ${Pname}`
+                });
+            }
+          
+        }
+       
+    
+        const existingProduct = await Product.findOne({ where: { Pname: Pname } });
+    
+        if (!existingProduct) {
+            return res.status(400).json({
+                msg: `Producto ${Pname}, ya existe`
+            })
+        }
+
+    
+        const uploadPath = path.join('./static/product');
+    
+        if (!fs.existsSync(uploadPath)) {
+            fs.mkdirSync(uploadPath, { recursive: true });
+        }
+    
+        const fileName = `Image-${Date.now()}.${file.mimetype.split('/')[1]}`;
+        const filePath = path.join(uploadPath, fileName);
+    
+        fs.writeFileSync(filePath, file.buffer);
+    
+    try {
+        
 
         await Product.update(
             {
                 Pname: Pname,
                 Pdescription: Pdescription,
-                Pstatus: 1,
-                CategoryId:CategoryId
+                Pprice: Pprice,
+                CategoryId: CategoryId,
+                Pimage: fileName, // Save the image file name to the database
+                Pstatus: Pstatus
             },
             { where: { Pid: Pid } }
         );
 
-        console.log("Estoy por aqui ******");
-        
 
         return res.json({
             msg: `Producto ${Pname} actualizada exitosamente`
